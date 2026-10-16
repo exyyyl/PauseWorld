@@ -1,0 +1,10 @@
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraftVersion}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${minecraftVersion == '1.20.1' ? fabric_api_1201 : fabric_api_1211}"
+}
+loom {
+    mixin { defaultRefmapName = 'projects.refmap.json' }
+    runs { client { client() } }
+}

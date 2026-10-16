@@ -1,0 +1,12 @@
+plugins { id 'net.neoforged.moddev.legacyforge' version '2.0.137' }
+legacyForge {
+    version = forge_1201
+    runs { client { client() } }
+    mods { projects { sourceSet sourceSets.main } }
+}
+dependencies { annotationProcessor 'org.spongepowered:mixin:0.8.5:processor' }
+mixin {
+    add sourceSets.main, 'projects.refmap.json'
+    config 'projects.mixins.json'
+}
+jar { manifest.attributes('MixinConfigs': 'projects.mixins.json') }

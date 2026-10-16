@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "org.example.exyyyl.projects.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "refmap": "projects.refmap.json",
+  "mixins": [
+    "MobEffectInstanceMixin",
+    "PlayerAirMixin",
+    "PlayerFoodMixin"
+  ],
+  "client": [
+    "MinecraftMixin",
+    "WorldExitMixin",
+    "GuiMixin",
+    "SoundManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,38 @@
+plugins { id 'net.minecraftforge.gradle' version '6.0.54' }
+
+// Mojang's macOS freetype patch is not published on Maven Central.
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'MojangLwjgl'
+                url = 'https://libraries.minecraft.net/'
+                metadataSources { artifact() }
+            }
+        }
+        filter { includeGroup 'org.lwjgl' }
+    }
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraftVersion
+    reobf = false
+    copyIdeResources = true
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'mixin.config', 'projects.mixins.json'
+            mods { projects { source sourceSets.main } }
+        }
+    }
+}
+dependencies { minecraft "net.minecraftforge:forge:${forge_1211}" }
+// Forge 1.21.1 uses Mojang names in production.
+jar { manifest.attributes('MixinConfigs': 'projects.mixins.json') }
+
+// Keep the development mod in one module directory, as required by Forge's MDK.
+sourceSets.each { sourceSet ->
+    def outputDir = layout.buildDirectory.dir("sourceSets/${sourceSet.name}")
+    sourceSet.output.resourcesDir = outputDir
+    sourceSet.java.destinationDirectory = outputDir
+}
