@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["exyyyl", "Skromi", "Ketzu"],
+  "license": "${mod_license}",
+  "icon": "projects.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["org.example.exyyyl.projects.fabric.WorldPauseFabric"]
+  },
+  "mixins": ["projects.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
+  }
+}

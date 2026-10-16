@@ -1,0 +1,35 @@
+name: Build WorldPause
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [1.20.1-fabric, 1.20.1-forge, 1.21.1-fabric, 1.21.1-forge, 1.21.1-neoforge]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build installable jar
+        run: ./gradlew -Ptarget=${{ matrix.target }} build collectJars --console=plain
+      - name: Check packaged metadata and mixins
+        run: python3 scripts/verify_artifact.py build/releases/*.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: worldpause-${{ matrix.target }}
+          path: build/releases/*.jar
+          if-no-files-found: error

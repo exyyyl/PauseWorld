@@ -1,0 +1,2 @@
+plugins { id 'fabric-loom' version '1.10.5' }
+apply from: rootProject.file('gradle/fabric.gradle')

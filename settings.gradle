@@ -1,11 +1,36 @@
 pluginManagement {
     repositories {
-        mavenLocal()
+        mavenCentral()
+        maven {
+            url = 'https://maven.fabricmc.net/'
+            content { includeGroupByRegex 'net\\.fabricmc.*'; includeGroup 'fabric-loom' }
+        }
+        maven {
+            url = 'https://maven.neoforged.net/releases'
+            content {
+                includeGroupByRegex 'net\\.neoforged.*'
+                includeGroupByRegex 'net\\.minecraftforge.*'
+                includeGroupByRegex 'net\\.covers1624.*'
+                includeGroup 'codechicken'
+            }
+        }
+        maven {
+            url = 'https://maven.minecraftforge.net/'
+            content { includeGroupByRegex 'net\\.minecraftforge.*'; includeGroupByRegex 'de\\.oceanlabs.*' }
+        }
         gradlePluginPortal()
-        maven { url = 'https://maven.neoforged.net/releases' }
     }
 }
-
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+plugins { id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0' }
+rootProject.name = 'WorldPause'
+// One selected target keeps unrelated loader toolchains out of local/CI builds.
+def targets = ['1.20.1-fabric', '1.20.1-forge', '1.21.1-fabric', '1.21.1-forge', '1.21.1-neoforge']
+def selected = providers.gradleProperty('target').orNull
+if (selected != null && !targets.contains(selected)) {
+    throw new GradleException("Unknown target '${selected}'. Choose one of: ${targets.join(', ')}")
+}
+(selected == null ? targets : [selected]).each { target ->
+    include(target)
+    def split = target.lastIndexOf('-')
+    project(":${target}").projectDir = file("versions/${target.substring(0, split)}/${target.substring(split + 1)}")
 }
